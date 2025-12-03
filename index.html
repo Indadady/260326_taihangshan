@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>투어메이커 - 정주 & 태항산 VIP 3박4일 초청 투어</title>
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="정주 & 태항산 VIP 3박4일 초청 투어">
+    <meta property="og:description" content="동양의 그랜드캐년, 태항산맥의 웅장한 비경과 고품격 휴식을 선사합니다.">
+    <meta property="og:image" content="https://mblogthumb-phinf.pstatic.net/MjAxODA5MTNfMjk2/MDAxNTM2ODMyMDI4MTg5.391-K4d4JBNMNh1ww1hQdpfufwNnmHEp2w237D52Zpkg.jY6ilCPcnhDGJOGjuu8trn_MPX4NB-bI9wj2i4JN2kQg.JPEG.ttpp2002/%ED%99%94%EC%82%B0%2C%EC%88%AD%EC%82%B0%2C%ED%83%9C%ED%95%AD%EC%82%B0_2379.JPG?type=w800">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+            word-break: keep-all;
+        }
+        .font-serif {
+            font-family: 'Noto Serif KR', serif;
+        }
+        /* 태항산 배경 */
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('https://mblogthumb-phinf.pstatic.net/MjAxODA5MTNfMjk2/MDAxNTM2ODMyMDI4MTg5.391-K4d4JBNMNh1ww1hQdpfufwNnmHEp2w237D52Zpkg.jY6ilCPcnhDGJOGjuu8trn_MPX4NB-bI9wj2i4JN2kQg.JPEG.ttpp2002/%ED%99%94%EC%82%B0%2C%EC%88%AD%EC%82%B0%2C%ED%83%9C%ED%95%AD%EC%82%B0_2379.JPG?type=w800');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #ef4444;
+        }
+        
+        /* Card Interactive Effects */
+        .spot-card, .food-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .spot-card:hover, .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        .spot-card:active, .food-card:active {
+            transform: scale(0.98);
+        }
+
+        /* Touch Hint Badge */
+        .touch-hint {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Modal */
+        .modal-container {
+            transition: all 0.3s ease-in-out;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            display: none; /* Hidden by default */
+            background-color: #000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .video-wrapper iframe, 
+        .video-thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+        }
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 0, 0, 0.9); /* YouTube Red */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .play-button::after {
+            content: '';
+            width: 0; 
+            height: 0; 
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 16px solid white;
+            margin-left: 4px;
+        }
+        .video-thumbnail:hover .play-button {
+            transform: translate(-50%, -50%) scale(1.1);
+            background-color: #ff0000;
+        }
+
+        /* Logo Blending Fix */
+        .logo-blend {
+             mix-blend-mode: multiply; 
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 3px; }
+        
+        /* Floating Button Animation */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.33); }
+            80%, 100% { opacity: 0; }
+        }
+        .pulse-ring::before {
+            content: ''; position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+            background-color: #ef4444; border-radius: 50%; z-index: -1;
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white shadow-sm transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center">
+                <!-- 투어메이커 로고 -->
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="투어메이커 Logo" class="h-10 md:h-12 object-contain logo-blend">
+            </a>
+            
+            <div class="hidden md:flex space-x-6 font-medium text-gray-700 text-sm lg:text-base">
+                <a href="#about" class="hover:text-red-500 transition">핵심포인트</a>
+                <a href="#day1" class="hover:text-red-500 transition">1일차</a>
+                <a href="#day2" class="hover:text-red-500 transition">2일차</a>
+                <a href="#day3" class="hover:text-red-500 transition">3일차</a>
+                <a href="#day4" class="hover:text-red-500 transition">4일차</a>
+                <a href="#hotel" class="hover:text-red-500 transition">호텔/식사</a>
+                <a href="tel:010-9003-3527" class="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition shadow-lg flex items-center gap-2">
+                    <i class="fas fa-phone-alt"></i> VIP 상담
+                </a>
+            </div>
+
+            <div class="md:hidden flex items-center gap-4">
+                <a href="tel:010-9003-3527" class="text-red-600 text-2xl animate-pulse"><i class="fas fa-phone-square-alt"></i></a>
+                <button class="text-gray-700" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"><i class="fas fa-bars text-2xl"></i></button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="flex flex-col p-4 space-y-3">
+                <a href="#about" class="block text-gray-700">핵심 포인트</a>
+                <a href="#day1" class="block text-gray-700">1일차 일정</a>
+                <a href="#day2" class="block text-gray-700">2일차 일정</a>
+                <a href="#day3" class="block text-gray-700">3일차 일정</a>
+                <a href="#day4" class="block text-gray-700">4일차 일정</a>
+                <a href="#hotel" class="block text-gray-700">호텔 및 식사</a>
+                <a href="tel:010-9003-3527" class="block text-red-600 font-bold bg-red-50 p-2 rounded text-center"><i class="fas fa-phone mr-2"></i> 이철교 담당자 직통전화</a>
+            </div>
+        </div>
+    </nav>
+
+    <a href="tel:010-9003-3527" class="fixed bottom-6 right-6 z-40 bg-red-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition pulse-ring md:hidden">
+        <i class="fas fa-phone-alt text-2xl"></i>
+    </a>
+
+    <!-- Hero -->
+    <header class="hero-bg h-screen flex items-center justify-center text-center px-4 relative">
+        <div class="text-white z-10" data-aos="fade-up">
+            <div class="inline-block border border-yellow-400 rounded-full px-4 py-1 mb-4 bg-black/30 backdrop-blur-sm">
+                <span class="text-yellow-400 font-bold tracking-wider text-sm md:text-base">VIP SPECIAL INVITATION</span>
+            </div>
+            <h2 class="text-xl md:text-3xl font-light mb-2 text-white font-serif">대자연의 감동</h2>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-shadow leading-tight font-serif">
+                정주 & 태항산<br><span class="text-red-500">고품격 3박 4일</span> 여행
+            </h1>
+            <p class="text-base md:text-xl font-light mb-8 max-w-2xl mx-auto opacity-90 text-shadow">
+                동양의 그랜드캐년, 웅장한 협곡과 천하 절경을<br>가장 편안하고 품격 있게 만나는 여정
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <div class="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-lg border border-white/30">
+                    <span class="block text-sm text-gray-200">출발일</span><span class="font-bold text-lg">2026. 03. 26 (목)</span>
+                </div>
+                <div class="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-lg border border-white/30">
+                    <span class="block text-sm text-gray-200">항공편</span><span class="font-bold text-lg">대한항공 (KE)</span>
+                </div>
+            </div>
+            <div class="mt-12 animate-bounce">
+                <a href="#about" class="text-white text-3xl opacity-80 hover:opacity-100 transition"><i class="fas fa-chevron-down"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- About -->
+    <section id="about" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 section-title">Travel Highlights</h2>
+                <p class="text-gray-600">고객님의 품격에 맞는 최고의 태항산 일정으로 모십니다.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 mx-auto bg-green-50 rounded-full flex items-center justify-center mb-6 text-green-600"><i class="fas fa-mountain text-2xl"></i></div>
+                    <h3 class="text-xl font-bold mb-3">태항산 완전 정복</h3>
+                    <p class="text-gray-500 text-sm">보천대협곡, 태항대협곡,<br>천계산, 만선산 등<br>핵심 비경을 빠짐없이 조망</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center mb-6 text-blue-600"><i class="fas fa-route text-2xl"></i></div>
+                    <h3 class="text-xl font-bold mb-3">편안한 이동</h3>
+                    <p class="text-gray-500 text-sm">전동카, 케이블카, 엘리베이터 등<br>다양한 운송 수단 탑승으로<br>걷는 부담을 최소화한 힐링 코스</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 mx-auto bg-yellow-50 rounded-full flex items-center justify-center mb-6 text-yellow-600"><i class="fas fa-bed text-2xl"></i></div>
+                    <h3 class="text-xl font-bold mb-3">고품격 휴식</h3>
+                    <p class="text-gray-500 text-sm">전 일정 4~5성급 준특급 호텔<br>& 무제한 삼겹살, 산채비빔밥 등<br>엄선된 특식 제공</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Day 1 -->
+    <section id="day1" class="py-20 bg-white border-b">
+        <div class="container mx-auto px-6">
+            <div class="flex items-end mb-12" data-aos="fade-right">
+                <div class="text-6xl font-black text-blue-100 -mb-4 -ml-2 absolute z-0 select-none">01</div>
+                <div class="relative z-10">
+                    <span class="text-blue-500 font-bold tracking-widest text-sm">DAY 1</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-1">태항산의 서막</h2>
+                    <p class="text-gray-500 mt-2 text-sm">인천 ➔ 정주 도착 ➔ 보천대협곡</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="spot-card rounded-xl overflow-hidden lg:col-span-3" onclick="openModal('baoquan')" data-aos="fade-up">
+                    <div class="touch-hint bg-red-600/80"><i class="fab fa-youtube"></i> 영상 보기</div>
+                    <div class="flex flex-col md:flex-row h-full">
+                        <div class="md:w-1/2 relative h-64 md:h-auto">
+                            <!-- 보천대협곡 이미지 Updated (Image 1) -->
+                            <img src="https://mblogthumb-phinf.pstatic.net/MjAyNDA5MjFfMjYg/MDAxNzI2OTAxMDE1MjUy.23vyvMmxvm6J7bfQxJvKDvRY3S-PUsLGHpA3KZEn0J4g.1y8aQQ9T5Brn_E1zO6SrK4ipg7YbvKGa48lVvPsLN1gg.JPEG/1726901014208.jpg?type=w800" onerror="this.src='https://via.placeholder.com/800x600?text=Baoquan+Canyon'" alt="Baoquan Grand Canyon" class="w-full h-full object-cover">
+                        </div>
+                        <div class="md:w-1/2 p-8 flex flex-col justify-center">
+                            <h3 class="text-2xl font-bold mb-3">보천대협곡 (Baoquan Grand Canyon)</h3>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-4">태항산 남쪽 기슭, '천 폭포의 계곡'이라 불리는 국립급 관광지입니다. 깊은 협곡과 에메랄드빛 호수, 웅장한 폭포 군락이 어우러진 수경(水景)이 압권이며, 셔틀버스, 유리전망대, 엘리베이터 등 다양한 탈거리를 통해 편안하게 절경을 감상할 수 있습니다.</p>
+                            <div class="bg-blue-50 p-4 rounded-lg"><span class="font-bold text-blue-700 text-sm">✨ Check Point</span><p class="text-xs text-gray-600">중원 지역 최고의 피서지이자 사진 명소. 걷기 편한 코스로 구성되어 있습니다.</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Day 2 -->
+    <section id="day2" class="py-20 bg-gray-50 border-b">
+        <div class="container mx-auto px-6">
+            <div class="flex items-end mb-12" data-aos="fade-right">
+                <div class="text-6xl font-black text-green-100 -mb-4 -ml-2 absolute z-0 select-none">02</div>
+                <div class="relative z-10">
+                    <span class="text-green-500 font-bold tracking-widest text-sm">DAY 2</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-1">하늘과 맞닿은 길</h2>
+                    <p class="text-gray-500 mt-2 text-sm">팔리구 ➔ 천계산 ➔ 괘벽공로 ➔ 곽량촌</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="spot-card rounded-xl overflow-hidden shadow-sm" onclick="openModal('baligou')" data-aos="fade-up">
+                    <div class="touch-hint"><i class="fas fa-images"></i> 상세 설명</div>
+                    <div class="relative h-64 overflow-hidden">
+                        <!-- 팔리구 폭포 이미지 (Fallback to standard) -->
+                        <img src="https://tse1.mm.bing.net/th/id/OIP.eHD0rxREHs7K8zo8U2gZnQHaFJ?w=474&h=474&c=7&p=0" onerror="this.src='https://via.placeholder.com/400x300?text=Baligou'" alt="Baligou Waterfall" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 spot-content">
+                        <h3 class="text-xl font-bold mb-2">팔리구 (천하폭포)</h3>
+                        <p class="text-gray-600 text-sm mb-4">'자연 산소바'라 불리는 8리(4km) 계곡. 천하수 폭포와 홍석하 등 태항산 물줄기의 진수를 만납니다.</p>
+                    </div>
+                </div>
+                <div class="spot-card rounded-xl overflow-hidden shadow-sm" onclick="openModal('tianjie')" data-aos="fade-up" data-aos-delay="50">
+                    <div class="touch-hint"><i class="fas fa-images"></i> 상세 설명</div>
+                    <div class="relative h-64 overflow-hidden">
+                        <!-- 천계산/태항산 이미지 Updated (Image 3) -->
+                        <img src="https://mblogthumb-phinf.pstatic.net/MjAxODA5MTNfMjk2/MDAxNTM2ODMyMDI4MTg5.391-K4d4JBNMNh1ww1hQdpfufwNnmHEp2w237D52Zpkg.jY6ilCPcnhDGJOGjuu8trn_MPX4NB-bI9wj2i4JN2kQg.JPEG.ttpp2002/%ED%99%94%EC%82%B0%2C%EC%88%AD%EC%82%B0%2C%ED%83%9C%ED%95%AD%EC%82%B0_2379.JPG?type=w800" onerror="this.src='https://via.placeholder.com/400x300?text=Tianjie+Mountain'" alt="Tianjie Mountain" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 spot-content">
+                        <h3 class="text-xl font-bold mb-2">천계산 & 운봉화랑</h3>
+                        <p class="text-gray-600 text-sm mb-4">하늘의 경계. 360도 파노라마 뷰를 즐기는 전동카 투어와 아찔한 유리다리 체험.</p>
+                    </div>
+                </div>
+                <div class="spot-card rounded-xl overflow-hidden shadow-sm lg:col-span-1" onclick="openModal('guoliang')" data-aos="fade-up" data-aos-delay="100">
+                    <div class="touch-hint bg-red-600/80"><i class="fab fa-youtube"></i> 세계 9대 불가사의</div>
+                    <div class="relative h-64 overflow-hidden">
+                         <!-- 괘벽공로 이미지 Updated (Image 2) -->
+                        <img src="https://cdn.enewstoday.co.kr/news/photo/201502/368245_47405_4510.jpg" onerror="this.src='https://via.placeholder.com/400x300?text=Cliff+Road'" alt="Guoliang Tunnel" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 spot-content">
+                        <h3 class="text-xl font-bold mb-2">만선산 괘벽공로</h3>
+                        <p class="text-gray-600 text-sm mb-4">절벽을 뚫어 만든 기적의 터널. 세계에서 가장 위험하고 아름다운 도로를 직접 체험합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Day 3 -->
+    <section id="day3" class="py-20 bg-white border-b">
+        <div class="container mx-auto px-6">
+            <div class="flex items-end mb-12" data-aos="fade-right">
+                <div class="text-6xl font-black text-stone-100 -mb-4 -ml-2 absolute z-0 select-none">03</div>
+                <div class="relative z-10">
+                    <span class="text-stone-600 font-bold tracking-widest text-sm">DAY 3</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-1">협곡의 대서사시</h2>
+                    <p class="text-gray-500 mt-2 text-sm">태항대협곡 ➔ 도화곡 ➔ 왕상암 ➔ 통천협</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                <div class="spot-card rounded-xl overflow-hidden" onclick="openModal('taihang')" data-aos="fade-up">
+                    <div class="touch-hint bg-red-600/80"><i class="fab fa-youtube"></i> 영상 보기</div>
+                    <div class="relative h-72 overflow-hidden">
+                        <!-- 태항대협곡 이미지 (Updated Image 3 reused for Taihang general) -->
+                        <img src="https://mblogthumb-phinf.pstatic.net/MjAxODA5MTNfMjk2/MDAxNTM2ODMyMDI4MTg5.391-K4d4JBNMNh1ww1hQdpfufwNnmHEp2w237D52Zpkg.jY6ilCPcnhDGJOGjuu8trn_MPX4NB-bI9wj2i4JN2kQg.JPEG.ttpp2002/%ED%99%94%EC%82%B0%2C%EC%88%AD%EC%82%B0%2C%ED%83%9C%ED%95%AD%EC%82%B0_2379.JPG?type=w800" onerror="this.src='https://via.placeholder.com/400x300?text=Taihang+Grand+Canyon'" alt="Taihang Canyon" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 spot-content">
+                        <h3 class="text-2xl font-bold mb-2">태항대협곡 (백리화랑)</h3>
+                        <p class="text-gray-600 text-sm mb-4">'백리화랑'이라 불리는 50km의 거대한 협곡. 복숭아꽃 피는 도화곡 트레킹과 태항산의 혼 왕상암을 조망하며 대자연의 웅장함을 만끽합니다.</p>
+                    </div>
+                </div>
+                <!-- Tongtian Update Here -->
+                <div class="spot-card rounded-xl overflow-hidden" onclick="openModal('tongtian')" data-aos="fade-up" data-aos-delay="50">
+                    <div class="touch-hint"><i class="fas fa-images"></i> 상세 설명</div>
+                    <div class="relative h-72 overflow-hidden">
+                        <!-- Trip.com Image for Card -->
+                        <img src="https://ak-d.tripcdn.com/images/1mi6x12000hd240ig7A60.jpg?proc=source%2Ftrip" onerror="this.src='https://via.placeholder.com/400x300?text=Tongtian+Gorge'" alt="Tongtian Gorge" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 spot-content">
+                        <h3 class="text-2xl font-bold mb-2">통천협 (하늘로 통하는 문)</h3>
+                        <p class="text-gray-600 text-sm mb-4">에메랄드빛 계류와 기암절벽의 조화. 케이블카를 타고 정상에 올라 태항산맥의 장관을 한눈에 담습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Day 4 -->
+    <section id="day4" class="py-20 bg-gray-50 border-b">
+        <div class="container mx-auto px-6">
+            <div class="flex items-end mb-12" data-aos="fade-right">
+                <div class="text-6xl font-black text-gray-200 -mb-4 -ml-2 absolute z-0 select-none">04</div>
+                <div class="relative z-10">
+                    <span class="text-gray-500 font-bold tracking-widest text-sm">DAY 4</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-1">아쉬움을 뒤로하고</h2>
+                    <p class="text-gray-500 mt-2 text-sm">호텔 조식 ➔ 정주 공항 이동 ➔ 인천 도착</p>
+                </div>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm text-center max-w-2xl mx-auto" data-aos="fade-up">
+                <i class="fas fa-plane-departure text-4xl text-blue-500 mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">안전한 귀국</h3>
+                <p class="text-gray-600">호텔에서 여유로운 아침 식사 후 공항으로 이동합니다.<br>3박 4일간의 잊지 못할 태항산 여행을 마무리합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hotel & Food -->
+    <section id="hotel" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span class="text-red-500 font-bold tracking-wider uppercase text-sm">ACCOMMODATION & DINING</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">편안한 휴식과 건강한 미식</h2>
+            </div>
+            
+            <!-- Hotels -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-20">
+                <!-- Hotel 1: Zen -->
+                <div class="spot-card rounded-xl overflow-hidden shadow-lg border border-gray-100" onclick="openModal('hotel_zen')" data-aos="fade-up">
+                    <div class="touch-hint"><i class="fas fa-images"></i> 상세 보기</div>
+                    <div class="h-48 relative">
+                        <img src="https://tse3.mm.bing.net/th/id/OIP.kVVoOj3-i1tgyQnNzh2sVAHaE6?w=474&h=474&c=7&p=0" onerror="this.src='https://via.placeholder.com/400x300?text=CC+Zen+Hotel'" alt="CC Quality Zen Hotel" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-gray-400 mb-1">XINXIANG</span>
+                        <h3 class="text-lg font-bold mb-2">신향 성성지전 호텔</h3>
+                        <p class="text-gray-600 text-xs mb-3">준5성급. 신도시 상권에 위치한 현대적인 비즈니스 호텔.</p>
+                        <p class="text-red-500 font-bold text-xs">★★★★☆</p>
+                    </div>
+                </div>
+                <!-- Hotel 2: Vienna -->
+                <div class="spot-card rounded-xl overflow-hidden shadow-lg border border-gray-100" onclick="openModal('hotel_vienna')" data-aos="fade-up" data-aos-delay="100">
+                    <div class="touch-hint"><i class="fas fa-images"></i> 상세 보기</div>
+                    <div class="h-48 relative">
+                        <img src="https://tse1.mm.bing.net/th/id/OIP.CF088zMQ-UzP7rZtAGSkdAHaFj?w=474&h=474&c=7&p=0" onerror="this.src='https://via.placeholder.com/400x300?text=Vienna+Hotel'" alt="Vienna Hotel" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-gray-400 mb-1">LINZHOU</span>
+                        <h3 class="text-lg font-bold mb-2">임주 비엔나 호텔</h3>
+                        <p class="text-gray-600 text-xs mb-3">유럽풍 인테리어와 안정적인 객실 컨디션의 중고급 체인 호텔.</p>
+                        <p class="text-red-500 font-bold text-xs">★★★★</p>
+                    </div>
+                </div>
+                <!-- Hotel 3: Marriott -->
+                <div class="spot-card rounded-xl overflow-hidden shadow-lg border border-gray-100" onclick="openModal('hotel_marriott')" data-aos="fade-up" data-aos-delay="200">
+                    <div class="touch-hint"><i class="fas fa-images"></i> 상세 보기</div>
+                    <div class="h-48 relative">
+                        <img src="https://tse2.mm.bing.net/th/id/OIP.4EiLR2mfi9NDO6VbpVg_ngHaE8?w=474&h=474&c=7&p=0" onerror="this.src='https://via.placeholder.com/400x300?text=Courtyard+Marriott'" alt="Courtyard Marriott" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-gray-400 mb-1">ZHENGZHOU</span>
+                        <h3 class="text-lg font-bold mb-2">정주 코트야드 메리어트</h3>
+                        <p class="text-gray-600 text-xs mb-3">글로벌 체인 호텔의 편안함. 여행의 마지막 밤을 안락하게.</p>
+                        <p class="text-red-500 font-bold text-xs">★★★★★</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gastronomy -->
+            <div class="text-center mb-12" data-aos="fade-up">
+                <h3 class="text-2xl font-bold text-gray-800">현지 특식 가이드</h3>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="food-card group aspect-square rounded-lg overflow-hidden relative" onclick="openModal('food_henan')" data-aos="fade-up">
+                    <img src="https://www.kochina21.com/data/photos/20210521/art_16221033326552_8fbd71.jpg" onerror="this.src='https://via.placeholder.com/300x300?text=Henan+Food'" alt="Henan Food" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <span class="text-white font-bold">하남 요리 (5味 조화)</span>
+                    </div>
+                </div>
+                <div class="food-card group aspect-square rounded-lg overflow-hidden relative" onclick="openModal('food_sanchae')" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://www.gb.go.kr/Main/data/food/urd_story_bibim2.jpg" onerror="this.src='https://via.placeholder.com/300x300?text=Bibimbap'" alt="Bibimbap" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <span class="text-white font-bold">웰빙 산채비빔밥</span>
+                    </div>
+                </div>
+                <div class="food-card group aspect-square rounded-lg overflow-hidden relative" onclick="openModal('food_pork')" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://newsimg.hankookilbo.com/2019/06/13/201906131424311598_6.jpg" onerror="this.src='https://via.placeholder.com/300x300?text=Pork+Belly'" alt="Pork Belly" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <span class="text-white font-bold">삼겹살 무제한</span>
+                    </div>
+                </div>
+                <div class="food-card group aspect-square rounded-lg overflow-hidden relative" onclick="openModal('food_ssambap')" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://images.openai.com/static-rsc-1/03WhsWdlUCNCPhaaU6ITa5nlmlIN2IBrbNAvXkrs-FXQV_BImdywi5XpHiDTwbV4duV2KzEiM1H5L4NnHxxVIJQ8DAVoX7sLxt6cKJbTop7UFoddVl8_jW1cgY9dXBfpH_ihzj0gblz5ENrWU2qXCw" onerror="this.src='https://via.placeholder.com/300x300?text=Ssambap'" alt="Ssambap" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                        <span class="text-white font-bold">건강식 쌈밥 정식</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white text-gray-600 py-10 border-t border-gray-200">
+        <div class="container mx-auto px-6 text-center md:text-left">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <!-- 투어메이커 로고 -->
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgHfgIX70O5k6Anuo0UgALIdaG9jSga9auHu3uyz0uEirylGPAJnjN_qQbvEGMUvPqUQf_g9FMNUHRxlDcUBf4vZ3Mpy4TnA9WxbmzWYK11gt2zuy_Irl4wctNFjcjLyPo0GPXV792o_J7L9guRMuDfeC1gy7USwywjYbECZgzcsHybuGRRAXAnO1eNmP8/s320/logo.png" alt="투어메이커 Logo" class="h-10 md:h-12 object-contain mb-4 logo-blend">
+                    <p class="text-xs text-gray-500">(주)투어메이커 | 담당자: 이철교 (010-9003-3527)</p>
+                </div>
+                <div class="text-xs text-center md:text-right text-gray-500">
+                    <p class="mb-2">* 상기 일정 및 식사는 현지 사정(천재지변, 교통상황 등)에 의해 다소 변경될 수 있습니다.</p>
+                    <p>&copy; 2026 TourMaker. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Structure -->
+    <div id="detailModal" class="fixed inset-0 z-[60] hidden flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl z-10 overflow-hidden transform transition-all scale-95 opacity-0 modal-container" id="modalContentWrapper">
+            <div class="relative">
+                <img id="modalImg" src="" alt="Detail" class="w-full h-64 md:h-96 object-cover" onerror="this.src='https://via.placeholder.com/800x600?text=No+Image'">
+                <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-black/80 transition z-20">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6 md:p-8 max-h-[60vh] overflow-y-auto">
+                <h3 id="modalTitle" class="text-2xl font-bold mb-3 text-gray-900"></h3>
+                <div class="w-12 h-1 bg-red-500 mb-4"></div>
+                <p id="modalDesc" class="text-gray-600 leading-relaxed whitespace-pre-line"></p>
+                
+                <!-- Youtube Video Container -->
+                <div id="videoContainer" class="video-wrapper">
+                    <!-- Iframe will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, offset: 50, duration: 800 });
+
+        // Data for Modals
+        // User Provided Content Mapped to Keys
+        const modalData = {
+            'baoquan': {
+                title: '보천대협곡 (Baoquan Grand Canyon)',
+                img: 'https://mblogthumb-phinf.pstatic.net/MjAyNDA5MjFfMjYg/MDAxNzI2OTAxMDE1MjUy.23vyvMmxvm6J7bfQxJvKDvRY3S-PUsLGHpA3KZEn0J4g.1y8aQQ9T5Brn_E1zO6SrK4ipg7YbvKGa48lVvPsLN1gg.JPEG/1726901014208.jpg?type=w800', 
+                desc: '허난성 신샹시 태항산 남쪽 기슭에 위치한 국립급 관광지입니다.\n\n**특징:**\n- 깊은 협곡 + 호수 + 폭포 군락이 이어지는 수려한 수경(물 풍경)으로 유명하며, ‘천 폭포의 계곡’이라고 불립니다.\n- 숲이 울창하고(산림율 90% 이상), 여름에도 기온이 낮아 중원 지역 대표 피서지로 꼽힙니다.\n\n**대표 루트:** 셔틀버스 → 절벽 공중버스/잔도 → 모노레일 → 유리전망대 → 엘리베이터 등 다양한 탈거리를 통해 편안하게 절경을 감상합니다.\n\n[추천 영상: Traveling in Henan - Meeting Taihang Mountain]',
+                videoId: 'EGJYovSXvVI', 
+                thumb: 'https://img.youtube.com/vi/EGJYovSXvVI/hqdefault.jpg'
+            },
+            'baligou': {
+                title: '팔리구 (Baligou Scenic Area)',
+                img: 'https://tse1.mm.bing.net/th/id/OIP.eHD0rxREHs7K8zo8U2gZnQHaFJ?w=474&h=474&c=7&p=0', 
+                desc: '태항산맥 심부에 위치한 국가 5A급 풍경구입니다.\n\n**특징:**\n- 8리(약 4km) 길이의 계곡을 따라 이어지는 산책로와 북중국에서 보기 드문 대형 폭포 군락이 있습니다.\n- 피톤치드 농도가 매우 높아 “자연 산소바”로 불립니다.\n- **대표 포인트:** 천하급 폭포인 천하수(천하 폭포), 홍석하(붉은 바위 계곡), 일선천 등.',
+                videoId: 'EGJYovSXvVI', // Shared Scenic Video
+                thumb: 'https://img.youtube.com/vi/EGJYovSXvVI/hqdefault.jpg'
+            },
+            'tianjie': {
+                title: '천계산 (Tianjie Mountain)',
+                img: 'https://mblogthumb-phinf.pstatic.net/MjAxODA5MTNfMjk2/MDAxNTM2ODMyMDI4MTg5.391-K4d4JBNMNh1ww1hQdpfufwNnmHEp2w237D52Zpkg.jY6ilCPcnhDGJOGjuu8trn_MPX4NB-bI9wj2i4JN2kQg.JPEG.ttpp2002/%ED%99%94%EC%82%B0%2C%EC%88%AD%EC%82%B0%2C%ED%83%9C%ED%95%AD%EC%82%B0_2379.JPG?type=w800',
+                desc: '"하늘의 경계에 닿는 산"이라는 뜻으로, 가파른 절벽과 능선이 어우러진 태항산의 전형을 보여줍니다.\n\n**운봉화랑 & 유리다리:**\n- 절벽 중간에 떠 있는 통로를 전동카로 이동하며 협곡을 360도 파노라마로 감상합니다.\n- 발 아래로 수백 미터 낭떠러지가 보이는 유리다리 스릴 체험이 포함되어 있습니다.\n\n**노야정:** 케이블카를 타고 올라 태항산의 S자 협곡(회룡 절경)을 한눈에 조망합니다.',
+                videoId: 'EGJYovSXvVI',
+                thumb: 'https://img.youtube.com/vi/EGJYovSXvVI/hqdefault.jpg'
+            },
+            'guoliang': {
+                title: '만선산 & 곽량촌 (Cliff-hanging Road)',
+                img: 'https://cdn.enewstoday.co.kr/news/photo/201502/368245_47405_4510.jpg',
+                desc: '태항산 절벽 중턱에 매달린 "가장 위험한 마을" 곽량촌과 세계적인 불가사의 **곽량동(절벽터널)**을 만납니다.\n\n**스토리:**\n과거 고립되었던 마을 주민들이 망치와 정만으로 5년간 절벽을 뚫어 만든 1.2km의 도로는 인간 승리의 현장입니다. 절벽 창문 사이로 보이는 협곡 뷰가 압권입니다.',
+                videoId: 'EGJYovSXvVI', 
+                thumb: 'https://img.youtube.com/vi/EGJYovSXvVI/hqdefault.jpg'
+            },
+            'taihang': {
+                title: '태항대협곡 (Taihang Grand Canyon)',
+                img: 'https://mblogthumb-phinf.pstatic.net/MjAxODA5MTNfMjk2/MDAxNTM2ODMyMDI4MTg5.391-K4d4JBNMNh1ww1hQdpfufwNnmHEp2w237D52Zpkg.jY6ilCPcnhDGJOGjuu8trn_MPX4NB-bI9wj2i4JN2kQg.JPEG.ttpp2002/%ED%99%94%EC%82%B0%2C%EC%88%AD%EC%82%B0%2C%ED%83%9C%ED%95%AD%EC%82%B0_2379.JPG?type=w800',
+                desc: '길이 50km에 달하는 거대한 협곡으로 **"백리화랑"**이라 불립니다.\n\n**핵심 포인트:**\n- **도화곡:** 복숭아꽃과 계곡물, 폭포가 어우러진 아름다운 트레킹 코스(황룡담, 이룡희주 등).\n- **왕상암:** 태항산의 혼이라 불리는 웅장한 암벽과 절경을 조망합니다.',
+                videoId: 'EGJYovSXvVI',
+                thumb: 'https://img.youtube.com/vi/EGJYovSXvVI/hqdefault.jpg'
+            },
+            'tongtian': {
+                title: '통천협 (Tongtian Gorge)',
+                img: 'https://images.openai.com/static-rsc-1/Pyz8wnRDRZo8XmEp6YIV5sodudzRo94A9i0hGsuwcBhQgzVLdmG5DVgGDnxp46S-UaAH9Pi9NLgw5pD9zPdZIOibLjtKi-77quSm14jW4QXN1iagALBnfqxHF41PmrSkEhletxiyf69bPrzZyGas6Q',
+                desc: '"하늘과 통하는 협곡"이라는 뜻의 국가급 지질공원입니다.\n\n**특징:**\n- 깊은 협곡과 에메랄드색 계류가 어우러져 신비로운 분위기를 자아냅니다.\n- 케이블카로 정상에 올라 협곡 전체를 내려다보고 선인봉으로 하산하는 입체적인 코스입니다.',
+                videoId: 'EGJYovSXvVI',
+                thumb: 'https://img.youtube.com/vi/EGJYovSXvVI/hqdefault.jpg'
+            },
+            'hotel_zen': {
+                title: '신향 성성지전 호텔 (CC Quality Zen Hotel)',
+                img: 'https://tse3.mm.bing.net/th/id/OIP.kVVoOj3-i1tgyQnNzh2sVAHaE6?w=474&h=474&c=7&p=0', 
+                desc: '허난성 신샹시 신도시 상권에 위치한 준5성급 호텔입니다.\n\n**특징:**\n- 2020년 전후 리노베이션된 쾌적한 시설(약 250실 규모).\n- 전 객실 무료 Wi-Fi 및 고급 어메니티 제공.\n- 깔끔한 조식 뷔페와 편리한 접근성으로 비즈니스 및 VIP 투어에 최적화되어 있습니다.',
+                videoId: null
+            },
+            'hotel_vienna': {
+                title: '임주 비엔나 호텔 (Vienna Int. Hotel)',
+                img: 'https://tse1.mm.bing.net/th/id/OIP.CF088zMQ-UzP7rZtAGSkdAHaFj?w=474&h=474&c=7&p=0', 
+                desc: '임주 도심권에 위치한 중고급 체인 호텔입니다.\n\n**특징:**\n- 유럽풍 인테리어와 안정적인 객실 퀄리티.\n- 깔끔한 침구와 샤워부스, 비즈니스 데스크 완비.\n- 중국식과 간단한 서양식이 결합된 조식 뷔페를 제공합니다.',
+                videoId: null
+            },
+            'hotel_marriott': {
+                title: '정주 코트야드 메리어트 (Courtyard by Marriott)',
+                img: 'https://tse2.mm.bing.net/th/id/OIP.4EiLR2mfi9NDO6VbpVg_ngHaE8?w=474&h=474&c=7&p=0', 
+                desc: '여행의 마지막을 장식할 정주 시내의 4~5성급 글로벌 체인 호텔입니다.\n\n**특징:**\n- 국제 표준의 고급 침구와 객실 컨디션.\n- 피트니스 센터, 비즈니스 센터 등 다양한 부대시설.\n- 퀄리티 높은 조식 뷔페로 편안한 휴식을 보장합니다.',
+                videoId: null
+            },
+            'food_henan': {
+                title: '하남 요리 (Henan Cuisine)',
+                img: 'https://www.kochina21.com/data/photos/20210521/art_16221033326552_8fbd71.jpg',
+                desc: '중원 지역을 대표하는 요리로 신맛, 단맛, 쓴맛, 매운맛, 짠맛의 조화를 중시합니다.\n\n**메뉴 구성:**\n- 고기/생선을 간장 베이스로 졸인 찜 요리(홍샤오)\n- 진한 육수의 탕 요리와 볶음 요리\n- 허난식 한상 차림으로 풍성하게 제공됩니다.',
+                videoId: null
+            },
+            'food_sanchae': {
+                title: '산채 비빔밥',
+                img: 'https://www.gb.go.kr/Main/data/food/urd_story_bibim2.jpg',
+                desc: '태항산의 정기를 머금은 나물과 신선한 야채를 즐기는 웰빙 한식입니다.\n\n**구성:**\n- 고사리, 도라지, 취나물 등 현지 산채 + 계란후라이\n- 한국인의 입맛에 딱 맞는 고추장 양념과 된장국',
+                videoId: null
+            },
+            'food_pork': {
+                title: '삼겹살 무제한',
+                img: 'https://newsimg.hankookilbo.com/2019/06/13/201906131424311598_6.jpg', 
+                desc: '여행의 피로를 풀어주는 든든한 저녁 식사입니다.\n\n**특징:**\n- 삼겹살 무제한 리필 제공\n- 신선한 쌈채소와 쌈장, 마늘, 김치찌개/된장찌개 제공\n- 한국식 고기 뷔페 스타일로 호불호 없는 최고의 메뉴',
+                videoId: null
+            },
+            'food_ssambap': {
+                title: '웰빙 쌈밥 정식',
+                img: 'https://images.openai.com/static-rsc-1/03WhsWdlUCNCPhaaU6ITa5nlmlIN2IBrbNAvXkrs-FXQV_BImdywi5XpHiDTwbV4duV2KzEiM1H5L4NnHxxVIJQ8DAVoX7sLxt6cKJbTop7UFoddVl8_jW1cgY9dXBfpH_ihzj0gblz5ENrWU2qXCw',
+                desc: '다양한 쌈 채소와 함께 즐기는 건강한 한 끼입니다.\n\n**구성:**\n- 제육볶음 또는 불고기 등 메인 요리\n- 풍성한 쌈채소(상추, 배추 등)와 강된장\n- 소화가 잘 되고 영양이 균형 잡힌 식단',
+                videoId: null
+            }
+        };
+
+        function openModal(id) {
+            const data = modalData[id];
+            if (!data) return;
+            
+            // 1. 이미지 및 텍스트 설정
+            document.getElementById('modalImg').src = data.img;
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('modalDesc').innerHTML = data.desc.replace(/\n/g, '<br>'); 
+            
+            // 2. 비디오 처리 로직
+            const videoContainer = document.getElementById('videoContainer');
+            videoContainer.innerHTML = ''; // 초기화
+
+            if (data.videoId) {
+                const thumbnailDiv = document.createElement('div');
+                thumbnailDiv.className = 'video-thumbnail';
+                thumbnailDiv.style.backgroundImage = `url('${data.thumb}')`;
+                thumbnailDiv.style.backgroundColor = '#000';
+                thumbnailDiv.innerHTML = '<div class="play-button"></div>';
+                
+                thumbnailDiv.onclick = function() {
+                    const iframe = document.createElement('iframe');
+                    // 공식 영상 연동 (Autoplay, Mute, Rel=0)
+                    iframe.setAttribute('src', `https://www.youtube.com/embed/${data.videoId}?autoplay=1&playsinline=1&rel=0&modestbranding=1`);
+                    iframe.setAttribute('frameborder', '0');
+                    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+                    iframe.setAttribute('allowfullscreen', 'true');
+                    videoContainer.innerHTML = ''; 
+                    videoContainer.appendChild(iframe); 
+                };
+                
+                videoContainer.appendChild(thumbnailDiv);
+                videoContainer.style.display = 'block';
+            } else {
+                videoContainer.style.display = 'none';
+            }
+            
+            // 3. 모달 애니메이션
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('modalContentWrapper');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('modalContentWrapper');
+            const videoContainer = document.getElementById('videoContainer');
+            
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                videoContainer.innerHTML = ''; // 닫을 때 영상 제거
+            }, 300);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
